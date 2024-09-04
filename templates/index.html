@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Journal Entry</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <div class="container">
+        <h1 class="text-center mt-5">Ed's Journal</h1>
+
+        <!-- Form to Load Entry by Date -->
+        <form method="get" action="/load_entry" class="form-inline mb-4 justify-content-center">
+            <div class="form-group">
+                <label for="load-date" class="mr-2">Select Date to Load Entry:</label>
+                <input type="date" id="load-date" name="date" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary ml-2">Load Entry</button>
+        </form>
+
+        <!-- Button to View Entries -->
+        <div class="text-center mt-4">
+            <a href="/view_entries" class="btn btn-secondary mb-2">View All Entries</a>
+        </div>
+
+        <!-- Previous and Next Day Buttons -->
+        {% if entry and entry['date'] %}
+        <div class="text-center mb-4">
+            <!-- Previous Day Button -->
+            <form method="get" action="/load_entry" class="d-inline">
+                <input type="hidden" name="date" value="{{ (entry['date'] - timedelta(days=1)).strftime('%Y-%m-%d') }}">
+                <button type="submit" class="btn btn-info mb-2">Previous Day</button>
+            </form>
+            <!-- Next Day Button -->
+            <form method="get" action="/load_entry" class="d-inline">
+                <input type="hidden" name="date" value="{{ (entry['date'] + timedelta(days=1)).strftime('%Y-%m-%d') }}">
+                <button type="submit" class="btn btn-info mb-2">Next Day</button>
+            </form>
+        </div>
+        {% endif %}
+
+    
+
+       
+
+        <!-- Form to Add or Update Entry -->
+        <form id="journalForm" method="post" action="/add_entry">
+            <div class="form-group">
+                <label for="date">Date:</label>
+                <input type="date" id="date" name="date" class="form-control" required value="{{ entry['date'].strftime('%Y-%m-%d') if entry and entry['date'] else '' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="weight">Weight (to 2 decimal places):</label>
+                <input type="number" step="0.01" id="weight" name="weight" class="form-control" value="{{ entry['weight'] if entry else '' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="calories">MyFitnessPal Calories Remaining:</label>
+                <input type="number" id="calories" name="calories" class="form-control" value="{{ entry['calories'] if entry else '' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="steps">Step Count:</label>
+                <input type="number" id="steps" name="steps" class="form-control" value="{{ entry['steps'] if entry else '' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="time_up">Time Up (24-hour format):</label>
+                <input type="time" id="time_up" name="time_up" class="form-control" value="{{ entry['time_up'] if entry else '' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="time_bed">Time In Bed (24-hour format):</label>
+                <input type="time" id="time_bed" name="time_bed" class="form-control" value="{{ entry['time_bed'] if entry else '' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="time_first_food">Time of First Food (24-hour format):</label>
+                <input type="time" id="time_first_food" name="time_first_food" class="form-control" value="{{ entry['time_first_food'] if entry else '' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="diary">Diary:</label>
+                <textarea id="diary" name="diary" rows="3" class="form-control">{{ entry['diary'] if entry else '' }}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="orla">Orla:</label>
+                <textarea id="orla" name="orla" rows="3" class="form-control">{{ entry['orla'] if entry else '' }}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="conor">Conor:</label>
+                <textarea id="conor" name="conor" rows="3" class="form-control">{{ entry['conor'] if entry else '' }}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="anne">Anne:</label>
+                <textarea id="anne" name="anne" rows="3" class="form-control">{{ entry['anne'] if entry else '' }}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="health_problems">Health Problems:</label>
+                <textarea id="health_problems" name="health_problems" rows="3" class="form-control">{{ entry['health_problems'] if entry else '' }}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="weather">Weather:</label>
+                <textarea id="weather" name="weather" rows="3" class="form-control">{{ entry['weather'] if entry else '' }}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="exercise">Exercise:</label>
+                <textarea id="exercise" name="exercise" rows="3" class="form-control">{{ entry['exercise'] if entry else '' }}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="dinner">Dinner:</label>
+                <textarea id="dinner" name="dinner" rows="3" class="form-control">{{ entry['dinner'] if entry else '' }}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="tv">Watched on TV:</label>
+                <textarea id="tv" name="tv" rows="3" class="form-control">{{ entry['tv'] if entry else '' }}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="beer">Beer x330ml (Integer):</label>
+                <input type="number" id="beer" name="beer" class="form-control" value="{{ entry['beer'] if entry else '' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="wine">Wine x175ml (Integer):</label>
+                <input type="number" id="wine" name="wine" class="form-control" value="{{ entry['wine'] if entry else '' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="spirit">Spirit x35ml (Integer):</label>
+                <input type="number" id="spirit" name="spirit" class="form-control" value="{{ entry['spirit'] if entry else '' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="gars">Gars (Integer):</label>
+                <input type="number" id="gars" name="gars" class="form-control" value="{{ entry['gars'] if entry else '' }}">
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block">Submit</button>
+        </form>
+
+        <!-- Flash messages for user feedback -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="mt-4">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
