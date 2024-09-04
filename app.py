@@ -11,6 +11,13 @@ app.secret_key = 'your_secret_key'  # Replace with a real secret key in producti
 # Initialize MongoDB client
 mongodb_uri = os.getenv('MONGODB_URI')
 client = MongoClient(mongodb_uri)
+
+try:
+    client.admin.command('ping')
+    print("Pinged your deployment. You successfully connected to MongoDB!")
+except Exception as e:
+    print(f"An error occurred: {e}")
+
 db = client['journaling']  # Create or connect to a MongoDB database named 'journaling'
 entries_collection = db['entries']  # Create or connect to a collection named 'entries'
 
