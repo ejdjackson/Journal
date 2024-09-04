@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Journal Entries</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <style>
+        .table-fixed {
+            table-layout: fixed;  /* Ensures fixed layout for columns */
+            width: 100%;  /* Ensure the table takes the full width */
+        }
+
+        /* Specific column width settings */
+        .col-date { width: 150px !important; }
+        .col-weight { width: 100px !important; }
+        .col-calories { width: 130px !important; }
+        .col-steps { width: 130px !important; }
+        .col-time { width: 120px !important; }
+        .col-text { width: 400px !important; }
+        .col-numeric { width: 150px !important; }
+
+        /* Ensure headers can wrap text */
+        th {
+            word-wrap: break-word;  /* Allow long words to break */
+            overflow-wrap: break-word;  /* Modern equivalent for long words */
+            white-space: normal;  /* Allows normal wrapping of text */
+        }
+
+        /* Optional: Prevent text overflow in cells */
+        .col-date, .col-weight, .col-calories, .col-steps, .col-time, .col-numeric {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <div class="container mt-5">
+        <h1 class="text-center">Stored Journal Entries</h1>
+        <div class="text-center mt-4">
+            <a href="/" class="btn btn-secondary">Add New Entry</a>
+            <a href="/export_csv" class="btn btn-primary">Export to CSV</a>
+            
+        </div>
+
+        <div class="table-responsive mt-4">
+            <table class="table table-striped table-bordered table-fixed">
+                <thead class="thead-dark">
+                    <tr>
+                        <th class="col-date">Date</th>
+                        <th class="col-weight">Weight</th>
+                        <th class="col-calories">Calories Remaining</th>
+                        <th class="col-steps">Step Count</th>
+                        <th class="col-time">Time Up</th>
+                        <th class="col-time">Time In Bed</th>
+                        <th class="col-time">First Food</th>
+                        <th class="col-text">Diary</th>
+                        <th class="col-text">Orla</th>
+                        <th class="col-text">Conor</th>
+                        <th class="col-text">Anne</th>
+                        <th class="col-text">Health Problems</th>
+                        <th class="col-text">Weather</th>
+                        <th class="col-text">Exercise</th>
+                        <th class="col-text">Dinner</th>
+                        <th class="col-text">Watched on TV</th>
+                        <th class="col-numeric">Beer x330ml</th>
+                        <th class="col-numeric">Wine x175ml</th>
+                        <th class="col-numeric">Spirit x35ml</th>
+                        <th class="col-numeric">Gars</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for entry in entries %}
+                    <tr>
+                        <td>{{ entry['date'] }}</td>
+                        <td>{{ entry['weight'] }}</td>
+                        <td>{{ entry['calories'] }}</td>
+                        <td>{{ entry['steps'] }}</td>
+                        <td>{{ entry['time_up'] }}</td>
+                        <td>{{ entry['time_bed'] }}</td>
+                        <td>{{ entry['time_first_food'] }}</td>
+                        <td>{{ entry['diary'] }}</td>
+                        <td>{{ entry['orla'] }}</td>
+                        <td>{{ entry['conor'] }}</td>
+                        <td>{{ entry['anne'] }}</td>
+                        <td>{{ entry['health_problems'] }}</td>
+                        <td>{{ entry['weather'] }}</td>
+                        <td>{{ entry['exercise'] }}</td>
+                        <td>{{ entry['dinner'] }}</td>
+                        <td>{{ entry['tv'] }}</td>
+                        <td>{{ entry['beer'] }}</td>
+                        <td>{{ entry['wine'] }}</td>
+                        <td>{{ entry['spirit'] }}</td>
+                        <td>{{ entry['gars'] }}</td>
+
+                        
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
