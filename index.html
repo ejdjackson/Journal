@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Journal Entry</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        form {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="date"],
+        textarea {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            font-size: 16px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .button {
+            display: block;
+            width: 100px;
+            margin: 20px auto;
+            padding: 10px;
+            text-align: center;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+        #responseMessage {
+            text-align: center;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Journal Entry</h1>
+    <form id="journalForm">
+        <label for="date">Date:</label>
+        <input type="date" id="date" name="date" required><br><br>
+
+        <label for="entry">Entry:</label>
+        <textarea id="entry" name="entry" rows="10" required></textarea><br><br>
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <a href="/view_entries" class="button">View Entries</a>
+
+    <p id="responseMessage"></p>
+
+    <script>
+        // JavaScript to handle form submission
+        document.getElementById('journalForm').addEventListener('submit', function(event) {
+            event.preventDefault();  // Prevent the default form submission
+
+            const formData = new FormData(this);
+
+            fetch('/add_entry', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                const responseMessage = document.getElementById('responseMessage');
+                if (data.status === 'success') {
+                    responseMessage.textContent = data.message;
+                    responseMessage.style.color = 'green';
+                    this.reset();  // Clear the form after successful submission
+                } else {
+                    responseMessage.textContent = data.message;
+                    responseMessage.style.color = 'red';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                const responseMessage = document.getElementById('responseMessage');
+                responseMessage.textContent = 'An error occurred while submitting your entry.';
+                responseMessage.style.color = 'red';
+            });
+        });
+    </script>
+</body>
+</html>

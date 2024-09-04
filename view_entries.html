@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Journal Entries</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .entry-container {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .entry {
+            border-bottom: 1px solid #ddd;
+            padding: 10px 0;
+        }
+        .entry:last-child {
+            border-bottom: none;
+        }
+        .entry-date {
+            color: #666;
+            font-size: 14px;
+        }
+        .entry-text {
+            margin-top: 5px;
+            font-size: 16px;
+        }
+        .button-container {
+            text-align: center;
+            margin: 20px;
+        }
+        .button {
+            display: inline-block;
+            width: 150px;
+            margin: 10px;
+            padding: 10px;
+            text-align: center;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Stored Journal Entries</h1>
+
+    <div class="button-container">
+        <a href="/" class="button">Add New Entry</a>
+        <a href="/export_csv" class="button">Export to CSV</a>
+    </div>
+
+    <div class="entry-container">
+        {% for entry in entries %}
+        <div class="entry">
+            <div class="entry-date">{{ entry.date }}</div>
+            <div class="entry-text">{{ entry.entry }}</div>
+        </div>
+        {% endfor %}
+    </div>
+
+    
+</body>
+</html>
