@@ -79,12 +79,11 @@ def load_entry():
         print(f"Received date from request: {selected_date}")  # Debugging statement
 
         if selected_date:
-            # Convert selected_date to a datetime object using the correct format
-            entry_date = datetime.strptime(selected_date, '%Y-%m-%d')
-            print(f"Parsed date object: {entry_date}")  # Debugging statement
+            # Assuming the date in MongoDB is stored as a string in the format '%Y-%m-%d'
+            # Do not convert selected_date to datetime, use it directly as a string
 
             # Find the entry with the given date
-            entry = entries_collection.find_one({'date': entry_date})
+            entry = entries_collection.find_one({'date': selected_date})
 
             if entry:
                 # Convert the entry's ObjectId to a string for the template
@@ -98,6 +97,7 @@ def load_entry():
         print(f"An error occurred: {e}")  # Debugging statement
         flash(f'An error occurred: {str(e)}', 'danger')
         return redirect(url_for('index'))
+
 
 
 
@@ -119,7 +119,7 @@ def view_entries():
                 date_object = datetime.strptime(entry['date'], '%d/%m/%Y')  # Adjust the format if needed
                 entry['date'] = date_object.strftime('%Y-%m-%d')  # Format the datetime object to string
 
-       
+        entries.sort('date',-1)
         return render_template('view_entries.html', entries=entries)
 
     except Exception as e:
