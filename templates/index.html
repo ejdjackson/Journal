@@ -20,29 +20,31 @@
             </div>
             <button type="submit" class="btn btn-primary ml-2">Load Entry</button>
         </form>
-
+        
         <!-- Button to View Entries -->
         <div class="text-center mt-4">
             <a href="/view_entries" class="btn btn-secondary mb-2">View All Entries</a>
         </div>
-
+        
         <!-- Previous and Next Day Buttons -->
-        {% if entry and entry['date'] %}
+        {% if entry and entry_date %}
         <div class="text-center mb-4">
             <!-- Previous Day Button -->
             <form method="get" action="/load_entry" class="d-inline">
-                <input type="hidden" name="date" value="{{ (entry['date'] - timedelta(days=1)).strftime('%Y-%m-%d') }}">
+                <input type="hidden" name="date" value="{{ (entry_date - timedelta(days=1)).strftime('%Y-%m-%d') }}">
                 <button type="submit" class="btn btn-info mb-2">Previous Day</button>
             </form>
             <!-- Next Day Button -->
             <form method="get" action="/load_entry" class="d-inline">
-                <input type="hidden" name="date" value="{{ (entry['date'] + timedelta(days=1)).strftime('%Y-%m-%d') }}">
+                <input type="hidden" name="date" value="{{ (entry_date + timedelta(days=1)).strftime('%Y-%m-%d') }}">
                 <button type="submit" class="btn btn-info mb-2">Next Day</button>
             </form>
         </div>
         {% endif %}
+        
 
-    
+       
+      
 
        
 
