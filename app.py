@@ -110,8 +110,8 @@ def view_entries():
         entries = list(entries_collection.find().sort('date', -1))
 
         # Convert the date field to a more readable format
-        for entry in entries:
-            entry['date'] = entry['date'].strftime('%Y-%m-%d') if entry['date'] else 'N/A'
+        #for entry in entries:
+        #    entry['date'] = entry['date'].strftime('%Y-%m-%d') if entry['date'] else 'N/A'
 
         return render_template('view_entries.html', entries=entries)
 
