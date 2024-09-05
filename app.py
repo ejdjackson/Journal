@@ -73,17 +73,19 @@ def add_entry():
 
 # Route to handle loading an entry based on the selected date
 @app.route('/load_entry', methods=['GET'])
+@app.route('/load_entry', methods=['GET'])
 def load_entry():
     try:
         selected_date = request.args.get('date')
         print(f"Received date from request: {selected_date}")  # Debugging statement
 
         if selected_date:
-            # Assuming the date in MongoDB is stored as a string in the format '%Y-%m-%d'
-            # Do not convert selected_date to datetime, use it directly as a string
+            # Assuming date in MongoDB is stored as a string in 'YYYY-MM-DD' format
+            print(f"Looking for entry with date: {selected_date}")  # Debugging statement
 
             # Find the entry with the given date
             entry = entries_collection.find_one({'date': selected_date})
+            print(f"Query result: {entry}")  # Debugging statement
 
             if entry:
                 # Convert the entry's ObjectId to a string for the template
@@ -91,7 +93,9 @@ def load_entry():
                 print(f"Found entry: {entry}")  # Debugging statement
                 return render_template('index.html', entry=entry, timedelta=timedelta)  # Pass timedelta
 
+        # If no entry is found or date is not provided, flash message and redirect
         flash('No entry found for the selected date.', 'info')
+        print("No entry found or date not provided, redirecting to home.")  # Debugging statement
         return redirect(url_for('index'))
     except Exception as e:
         print(f"An error occurred: {e}")  # Debugging statement
@@ -102,28 +106,33 @@ def load_entry():
 
 
 
+
 # Route to display stored journal entries
+@app.route('/view_entries')
 @app.route('/view_entries')
 def view_entries():
     try:
-        # Fetch all entries from MongoDB and sort by date (newest first)
-        #entries = list(entries_collection.find().sort('date', -1))
-
         # Fetch entries from MongoDB
         entries = list(entries_collection.find())
 
-        # Convert date strings to datetime objects and format them
+        # Convert date strings to datetime objects and sort by date in descending order
         for entry in entries:
             if 'date' in entry and isinstance(entry['date'], str):
-                # Convert string to datetime object
-                date_object = datetime.strptime(entry['date'], '%d/%m/%Y')  # Adjust the format if needed
-                entry['date'] = date_object.strftime('%Y-%m-%d')  # Format the datetime object to string
+                # Convert string to datetime object using the correct format
+                entry['date'] = datetime.strptime(entry['date'], '%d/%m/%Y')  # Adjust the format if needed
 
-        entries.sort('date',-1)
+        # Sort the entries by date in descending order after converting them to datetime objects
+        entries.sort(key=lambda x: x['date'], reverse=True)
+
+        # If you want to format dates back to strings for displaying
+        for entry in entries:
+            entry['date'] = entry['date'].strftime('%Y-%m-%d')  # Adjust format for display
+
         return render_template('view_entries.html', entries=entries)
 
     except Exception as e:
-        return jsonify({'status': 'error', 'message': str(e)})
+        return jsonify({"message": str(e), "status": "error"})
+
 
 # Route to handle updating an entry
 @app.route('/update_entry/<entry_id>', methods=['POST'])
