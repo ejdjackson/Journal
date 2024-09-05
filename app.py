@@ -73,27 +73,25 @@ def add_entry():
 
 # Route to handle loading an entry based on the selected date
 @app.route('/load_entry', methods=['GET'])
-@app.route('/load_entry', methods=['GET'])
 def load_entry():
     try:
         selected_date = request.args.get('date')
         print(f"Received date from request: {selected_date}")  # Debugging statement
 
         if selected_date:
-            # Assuming date in MongoDB is stored as a string in 'YYYY-MM-DD' format
-            print(f"Looking for entry with date: {selected_date}")  # Debugging statement
+            # Convert selected_date from 'YYYY-MM-DD' to 'DD/MM/YYYY' format
+            entry_date = datetime.strptime(selected_date, '%Y-%m-%d').strftime('%d/%m/%Y')
+            print(f"Reformatted date string for query: {entry_date}")  # Debugging statement
 
-            # Find the entry with the given date
-            entry = entries_collection.find_one({'date': selected_date})
+            # Find the entry with the given date in the reformatted string format
+            entry = entries_collection.find_one({'date': entry_date})
             print(f"Query result: {entry}")  # Debugging statement
 
             if entry:
-                # Convert the entry's ObjectId to a string for the template
                 entry['_id'] = str(entry['_id'])
                 print(f"Found entry: {entry}")  # Debugging statement
                 return render_template('index.html', entry=entry, timedelta=timedelta)  # Pass timedelta
 
-        # If no entry is found or date is not provided, flash message and redirect
         flash('No entry found for the selected date.', 'info')
         print("No entry found or date not provided, redirecting to home.")  # Debugging statement
         return redirect(url_for('index'))
@@ -101,6 +99,7 @@ def load_entry():
         print(f"An error occurred: {e}")  # Debugging statement
         flash(f'An error occurred: {str(e)}', 'danger')
         return redirect(url_for('index'))
+
 
 
 
