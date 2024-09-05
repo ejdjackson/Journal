@@ -91,7 +91,7 @@ def load_entry():
                 entry['_id'] = str(entry['_id'])
                 print(f"Found entry: {entry}")  # Debugging statement
 
-                # Convert entry date back to a datetime object to handle timedelta
+                # Convert the 'date' field in the entry back to a datetime object
                 entry_date = datetime.strptime(entry['date'], '%d/%m/%Y')
 
                 # Use entry_date and timedelta in the template context
@@ -104,6 +104,7 @@ def load_entry():
         print(f"An error occurred: {e}")  # Debugging statement
         flash(f'An error occurred: {str(e)}', 'danger')
         return redirect(url_for('index'))
+
 
 
 
