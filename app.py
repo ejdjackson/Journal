@@ -93,6 +93,7 @@ def load_entry():
 
                 # Convert the 'date' field in the entry back to a datetime object
                 entry_date = datetime.strptime(entry['date'], '%d/%m/%Y')
+                print(f"Converted entry_date: {entry_date}")  # Debugging statement
 
                 # Use entry_date and timedelta in the template context
                 return render_template('index.html', entry=entry, timedelta=timedelta, entry_date=entry_date)
@@ -112,8 +113,9 @@ def load_entry():
 
 
 
+
 # Route to display stored journal entries
-@app.route('/view_entries')
+
 @app.route('/view_entries')
 def view_entries():
     try:
