@@ -79,18 +79,23 @@ def load_entry():
         print(f"Received date from request: {selected_date}")  # Debugging statement
 
         if selected_date:
-            # Convert selected_date from 'YYYY-MM-DD' to 'DD/MM/YYYY' format
-            entry_date = datetime.strptime(selected_date, '%Y-%m-%d').strftime('%d/%m/%Y')
-            print(f"Reformatted date string for query: {entry_date}")  # Debugging statement
+            # Convert selected_date from 'YYYY-MM-DD' to 'DD/MM/YYYY' format for querying
+            entry_date_str = datetime.strptime(selected_date, '%Y-%m-%d').strftime('%d/%m/%Y')
+            print(f"Reformatted date string for query: {entry_date_str}")  # Debugging statement
 
             # Find the entry with the given date in the reformatted string format
-            entry = entries_collection.find_one({'date': entry_date})
+            entry = entries_collection.find_one({'date': entry_date_str})
             print(f"Query result: {entry}")  # Debugging statement
 
             if entry:
                 entry['_id'] = str(entry['_id'])
                 print(f"Found entry: {entry}")  # Debugging statement
-                return render_template('index.html', entry=entry, timedelta=timedelta)  # Pass timedelta
+
+                # Convert entry date back to a datetime object to handle timedelta
+                entry_date = datetime.strptime(entry['date'], '%d/%m/%Y')
+
+                # Use entry_date and timedelta in the template context
+                return render_template('index.html', entry=entry, timedelta=timedelta, entry_date=entry_date)
 
         flash('No entry found for the selected date.', 'info')
         print("No entry found or date not provided, redirecting to home.")  # Debugging statement
