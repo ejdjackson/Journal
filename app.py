@@ -107,12 +107,19 @@ def load_entry():
 def view_entries():
     try:
         # Fetch all entries from MongoDB and sort by date (newest first)
-        entries = list(entries_collection.find().sort('date', -1))
+        #entries = list(entries_collection.find().sort('date', -1))
 
-        # Convert the date field to a more readable format
-        #for entry in entries:
-        #    entry['date'] = entry['date'].strftime('%Y-%m-%d') if entry['date'] else 'N/A'
+        # Fetch entries from MongoDB
+        entries = list(entries_collection.find())
 
+        # Convert date strings to datetime objects and format them
+        for entry in entries:
+            if 'date' in entry and isinstance(entry['date'], str):
+                # Convert string to datetime object
+                date_object = datetime.strptime(entry['date'], '%d/%m/%Y')  # Adjust the format if needed
+                entry['date'] = date_object.strftime('%Y-%m-%d')  # Format the datetime object to string
+
+       
         return render_template('view_entries.html', entries=entries)
 
     except Exception as e:
